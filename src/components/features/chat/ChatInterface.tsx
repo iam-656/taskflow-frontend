@@ -136,7 +136,7 @@ function MessageBubble({ role, content, timestamp, isPending }: { role: string, 
     const timeDisplay = timestamp ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now';
 
     // Hide tool calls from the UI (e.g. >>> {"tool": ...})
-    const cleanContent = content.replace(/>>>\s*{.*?}/gs, '').trim();
+    const cleanContent = content.replace(/>>>\s*{[\s\S]*?}/g, '').trim();
 
     if (!cleanContent && !isUser) return null; // Don't render empty assistant bubbles if only tool call
 
