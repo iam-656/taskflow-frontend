@@ -82,7 +82,7 @@ export function TaskEditor({ task, onClose, workspaceId }: TaskEditorProps) {
     const newDate = e.target.value;
     setDueDate(newDate);
     if (!isNew && task) {
-        updateTaskMutation.mutate({ id: task.id, due_date: newDate ? new Date(newDate).toISOString() : null });
+        updateTaskMutation.mutate({ id: task.id, due_date: newDate ? new Date(newDate).toISOString() : undefined });
     }
   };
 
