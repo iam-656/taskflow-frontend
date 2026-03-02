@@ -19,7 +19,9 @@ export function TaskEditor({ task, onClose, workspaceId }: TaskEditorProps) {
 
   const [title, setTitle] = useState(task?.title || '');
   const [dueDate, setDueDate] = useState(task?.due_date ? task.due_date.split('T')[0] : '');
-  const [status, setStatus] = useState<'todo' | 'done'>(task?.status || 'todo');
+  const [status, setStatus] = useState<'todo' | 'in_progress' | 'done'>(
+    task?.status || 'todo'
+  );
   const [priority, setPriority] = useState<'low' | 'medium' | 'high'>(task?.priority || 'medium');
 
   // Sync state when switching between tasks (only if not creating a new one)
