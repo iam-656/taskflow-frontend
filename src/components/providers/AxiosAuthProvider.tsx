@@ -1,14 +1,17 @@
 'use client';
 
 import { useAuth } from '@clerk/nextjs';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { setAuthToken } from '@/lib/api';
 
 export default function AxiosAuthProvider({ children }: { children: React.ReactNode }) {
-  const { getToken, isSignedIn } = useAuth();
+  const { getToken, isSignedIn, isLoaded } = useAuth();
+  const [tokenSynced, setTokenSynced] = useState(false);
 
   useEffect(() => {
     const syncToken = async () => {
+      if (!isLoaded) return;
+      
       if (isSignedIn) {
         // Get the JWT token from Clerk
         const token = await getToken();
@@ -18,10 +21,16 @@ export default function AxiosAuthProvider({ children }: { children: React.ReactN
         // Clear token if signed out
         setAuthToken(null);
       }
+      setTokenSynced(true);
     };
 
     syncToken();
-  }, [getToken, isSignedIn]);
+  }, [getToken, isSignedIn, isLoaded]);
+
+  // Wait for Clerk to load AND for the token to be synced to axios
+  if (!isLoaded || (isSignedIn && !tokenSynced)) {
+    return null;
+  }
 
   return <>{children}</>;
 }

@@ -7,12 +7,17 @@ interface TaskQueryParams {
 }
 
 const fetchTasks = async (params?: TaskQueryParams): Promise<Task[]> => {
-  const { data } = await api.get<Task[]>('/tasks', { 
-    params: { 
-        workspace_id: params?.workspaceId
-    } 
-  });
-  return data;
+  try {
+    const { data } = await api.get<Task[]>('/tasks', { 
+      params: { 
+          workspace_id: params?.workspaceId
+      } 
+    });
+    return data;
+  } catch (err) {
+    console.error("Error fetching tasks:", err);
+    throw err;
+  }
 };
 
 const createTask = async (task: Partial<Task>): Promise<Task> => {
